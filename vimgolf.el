@@ -393,6 +393,9 @@ part of the arg list away."
 (defvar *vimgolf-browse-list* nil
   "Holds a list of parsed VimGolf challenges.")
 
+(defvar *vimgolf-browse-page-number* 1
+  "Holds the page number currently being browsed.")
+
 (defun vimgolf-browse
     (&optional force-pull)
   "Browse VimGolf challenges in a dedicated buffer.
@@ -401,7 +404,9 @@ TODO Is there no API for browsing all the challenges?"
   (interactive)
   (if (or (eq *vimgolf-browse-list* nil)
           force-pull)
-      (url-retrieve vimgolf-host 'vimgolf-parse-browse-html)
+      (url-retrieve (concat vimgolf-host "/?page="
+                            (number-to-string *vimgolf-browse-page-number*))
+                    'vimgolf-parse-browse-html)
     (vimgolf-browse-list)
     (vimgolf-browse-next)))
 
@@ -497,6 +502,22 @@ argument is dropped on the floor."
     (when challenge-id
       (message (cadr (assoc challenge-id *vimgolf-browse-list*))))))
 
+(defun vimgolf-browse-next-page
+    ()
+  "Load next page of challenges."
+  (interactive)
+  (if (< *vimgolf-browse-page-number* 10)
+      (setq *vimgolf-browse-page-number* (+ 1 *vimgolf-browse-page-number*)))
+  (vimgolf-browse t))
+
+(defun vimgolf-browse-previous-page
+    ()
+  "Load previous page of challenges."
+  (interactive)
+  (if (> *vimgolf-browse-page-number* 1)
+      (setq *vimgolf-browse-page-number* (- *vimgolf-browse-page-number* 1)))
+  (vimgolf-browse t))
+
 (defun vimgolf-browse-next
     ()
   "Move point to the next challenge."
@@ -558,6 +579,8 @@ argument is dropped on the floor."
   (define-key vimgolf-browse-mode-map "g" 'vimgolf-browse-refresh)
   (define-key vimgolf-browse-mode-map "n" 'vimgolf-browse-next)
   (define-key vimgolf-browse-mode-map "p" 'vimgolf-browse-previous)
+  (define-key vimgolf-browse-mode-map "N" 'vimgolf-browse-next-page)
+  (define-key vimgolf-browse-mode-map "P" 'vimgolf-browse-previous-page)
 )
 
 (put 'vimgolf-mode 'mode-class 'special)
