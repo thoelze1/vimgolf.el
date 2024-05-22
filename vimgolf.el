@@ -407,7 +407,7 @@ part of the arg list away."
 (defvar vimgolf--browse-list nil
   "Holds a list of parsed VimGolf challenges.")
 
-(defvar *vimgolf-browse-page-number* 1
+(defvar vimgolf--browse-page-number 1
   "Holds the page number currently being browsed.")
 
 (defvar vimgolf--browse-last-page nil
@@ -425,7 +425,7 @@ TODO Is there no API for browsing all the challenges?"
   (if (or (eq vimgolf--browse-list nil)
           force-pull)
       (url-retrieve (concat vimgolf-host "/?page="
-                            (number-to-string *vimgolf-browse-page-number*))
+                            (number-to-string vimgolf--browse-page-number))
                     'vimgolf-parse-browse-html)
     (vimgolf-browse-list)
     (vimgolf-browse-next)))
@@ -537,18 +537,18 @@ the arg is ignored."
     ()
   "Load next page of challenges."
   (interactive)
-  (if (equal *vimgolf-browse-page-number* vimgolf--browse-last-page)
+  (if (equal vimgolf--browse-page-number vimgolf--browse-last-page)
       (message "You are already at the last page")
-    (setq *vimgolf-browse-page-number* (+ 1 *vimgolf-browse-page-number*))
+    (setq vimgolf--browse-page-number (+ 1 vimgolf--browse-page-number))
     (vimgolf-browse t)))
 
 (defun vimgolf-browse-previous-page
     ()
   "Load previous page of challenges."
   (interactive)
-  (if (equal *vimgolf-browse-page-number* 1)
+  (if (equal vimgolf--browse-page-number 1)
       (message "You are already at the first page")
-    (setq *vimgolf-browse-page-number* (- *vimgolf-browse-page-number* 1))
+    (setq vimgolf--browse-page-number (- vimgolf--browse-page-number 1))
     (vimgolf-browse t)))
 
 (defun vimgolf-browse-next
