@@ -419,9 +419,7 @@ part of the arg list away."
   "Browse VimGolf challenges in a dedicated buffer.
 
 Optional FORCE-PULL will retrieve challenges again even if
-`vimgolf--browse-list' was already generated.
-
-TODO Is there no API for browsing all the challenges?"
+`vimgolf--browse-list' was already generated."
   (interactive)
   (if (or (eq vimgolf--browse-list nil)
           force-pull)
