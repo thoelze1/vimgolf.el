@@ -51,6 +51,7 @@
 ;; Steve Purcell (@sanityinc)
 ;; Adam Collard (@acollard)
 ;; Siddhanathan Shanmugam (@siddhanathan)
+;; Tanner Hoelzel (@thoelze1)
 
 ;;; Code:
 
