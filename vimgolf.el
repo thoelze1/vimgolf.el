@@ -410,6 +410,9 @@ part of the arg list away."
 (defvar *vimgolf-browse-page-number* 1
   "Holds the page number currently being browsed.")
 
+(defvar vimgolf--browse-last-page nil
+  "Holds the number of the last page of challenges.")
+
 (defun vimgolf-browse
     (&optional force-pull)
   "Browse VimGolf challenges in a dedicated buffer.
@@ -463,6 +466,13 @@ argument is dropped on the floor."
   (with-current-buffer (current-buffer)
     (let ((html (vimgolf-parse-html-entites
                  (replace-regexp-in-string "\n" "" (buffer-string)))))
+      (if (not vimgolf--browse-last-page)
+          (progn
+            (string-match
+             "<span class=\"last\"><a href=\"/\\?page=\\([0-9]+\\)\">"
+             html)
+            (setq vimgolf--browse-last-page
+                  (string-to-number (match-string 1 html)))))
       (setq vimgolf--browse-list nil)
       (while
           (string-match
