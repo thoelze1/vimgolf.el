@@ -537,17 +537,19 @@ the arg is ignored."
     ()
   "Load next page of challenges."
   (interactive)
-  (if (< *vimgolf-browse-page-number* 10)
-      (setq *vimgolf-browse-page-number* (+ 1 *vimgolf-browse-page-number*)))
-  (vimgolf-browse t))
+  (if (equal *vimgolf-browse-page-number* vimgolf--browse-last-page)
+      (message "You are already at the last page")
+    (setq *vimgolf-browse-page-number* (+ 1 *vimgolf-browse-page-number*))
+    (vimgolf-browse t)))
 
 (defun vimgolf-browse-previous-page
     ()
   "Load previous page of challenges."
   (interactive)
-  (if (> *vimgolf-browse-page-number* 1)
-      (setq *vimgolf-browse-page-number* (- *vimgolf-browse-page-number* 1)))
-  (vimgolf-browse t))
+  (if (equal *vimgolf-browse-page-number* 1)
+      (message "You are already at the first page")
+    (setq *vimgolf-browse-page-number* (- *vimgolf-browse-page-number* 1))
+    (vimgolf-browse t)))
 
 (defun vimgolf-browse-next
     ()
